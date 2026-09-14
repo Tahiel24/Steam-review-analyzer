@@ -252,3 +252,9 @@ models/distilbert_sentiment/
 # ChromaDB y bases de datos locales
 data/chroma_db/
 *.sqlite3
+
+# Excepciones: Permitir dataset procesado y ChromaDB para la app en producción
+!data/processed/reviews_en_clean.csv
+!data/chroma_db/
+!data/chroma_db/**
+!data/chroma_db/*.sqlite3
