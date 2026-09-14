@@ -3,8 +3,10 @@ from pathlib import Path
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-# Ruta absoluta por defecto hacia la carpeta models/distilbert_sentiment en la raíz
+# Ruta local por defecto
 DEFAULT_MODEL_DIR = Path(__file__).resolve().parent.parent.parent / "models" / "distilbert_sentiment"
+# Identificador oficial en Hugging Face Hub
+HF_MODEL_ID = "Tahiel24/steam-distilbert-sentiment"
 
 
 class SentimentClassifier:
@@ -14,20 +16,22 @@ class SentimentClassifier:
     def __init__(self, model_path: str = None):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        # Si no se pasa ruta, usamos la ruta absoluta calculada
-        target_path = Path(model_path) if model_path else DEFAULT_MODEL_DIR
+        # 1. Prioridad: parámetro pasado o variable de entorno
+        env_path = os.getenv("MODEL_PATH")
+        selected_path = model_path or env_path
 
-        if not target_path.exists():
-            print(f"[ALERTA] No se encontró el directorio de modelo en: {target_path}")
-            print("Usando 'distilbert-base-uncased' de respaldo (sin calibrar).")
-            load_target = "distilbert-base-uncased"
-            self.model = AutoModelForSequenceClassification.from_pretrained(load_target, num_labels=2)
+        if selected_path:
+            load_target = selected_path
+            print(f"[INFO] Cargando modelo especificado: {load_target}")
+        elif DEFAULT_MODEL_DIR.exists():
+            load_target = str(DEFAULT_MODEL_DIR)
+            print(f"[INFO] Cargando modelo local desde: {load_target}")
         else:
-            print(f"[INFO] Cargando modelo entrenado desde: {target_path}")
-            load_target = str(target_path)
-            # Carga directa de pesos y configuración entrenada
-            self.model = AutoModelForSequenceClassification.from_pretrained(load_target)
+            # Si no hay ruta local (como en Streamlit Cloud), descarga desde Hugging Face
+            load_target = HF_MODEL_ID
+            print(f"[INFO] Directorio local no detectado. Descargando desde Hugging Face Hub: {load_target}")
 
+        self.model = AutoModelForSequenceClassification.from_pretrained(load_target)
         self.tokenizer = AutoTokenizer.from_pretrained(load_target)
         self.model.to(self.device)
         self.model.eval()
