@@ -1,4 +1,4 @@
-# Steam Review Intelligence & Triage System
+# Steam Review Intelligence
 
 **Cuando 500 reseñas negativas caen en 48 horas, un desarrollador necesita una respuesta rápida: ¿es un bug real o una campaña coordinada?** Este sistema separa la señal del ruido — distingue crítica legítima de review bombing, y convierte miles de reseñas en un informe ejecutivo accionable.
 
