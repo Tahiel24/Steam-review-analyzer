@@ -7,7 +7,7 @@
 ![Dashboard principal](docs/images/dashboard.png)
 -->
 
-🔗 **[Demo en vivo](#)** *(pendiente de deploy)* · 📄 **[Swagger / API Docs](#)** *(pendiente de deploy — correr localmente con `/docs`)*
+🔗 **[Demo en vivo](https://steamrv.streamlit.app/)** · 📄 **[Swagger / API Docs](#)** *(correr localmente con `/docs`)*
 
 ---
 
